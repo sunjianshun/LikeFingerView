@@ -1,18 +1,19 @@
 package wu.sun.org.widget;
 
+import wu.sun.org.likefingerdemo.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import wu.sun.org.upviewdemo.R;
-
 /**
  * Created by jianshunsun on 15-8-8.
  */
-public class UpView extends RelativeLayout implements View.OnClickListener {
+public class LikeFingerView extends RelativeLayout implements View.OnClickListener {
 
 	private ImageView mImageView;
 	private TextView mTextView;
@@ -24,17 +25,17 @@ public class UpView extends RelativeLayout implements View.OnClickListener {
 		void onChanged(boolean isLiked);
 	}
 	
-    public UpView(Context context) {
+    public LikeFingerView(Context context) {
         this(context, null, 0);
     }
 
-    public UpView(Context context, AttributeSet attrs) {
+    public LikeFingerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public UpView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LikeFingerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        inflate(context, R.layout.widget_up_view, this);
+        inflate(context, R.layout.widget_like_finger_view, this);
         initViews();
     }
     
@@ -50,8 +51,15 @@ public class UpView extends RelativeLayout implements View.OnClickListener {
 	public void onClick(View view) {
     	mIsLiked = !mIsLiked;
 		mImageView.setSelected(mIsLiked);
-		if (mIsLiked) mNumber++;
-		else mNumber--;
+		if (mIsLiked) {
+			mNumber++;
+			Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.like_finger_up);  
+	        mImageView.startAnimation(anim); 
+		} else {
+			mNumber--;
+			Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.like_finger_down);  
+	        mImageView.startAnimation(anim); 
+		}
 		mTextView.setText(mNumber + "");
 		if (mListener != null) {
 			mListener.onChanged(mIsLiked);
